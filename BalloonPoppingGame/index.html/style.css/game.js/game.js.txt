@@ -1,0 +1,155 @@
+document.addEventListener('DOMContentLoaded', function() {
+    let score = 0;
+    let highScore = 0;  // Variable to store high score
+    let specialBalloonAvailable = true;  // To track special balloon availability
+    let timeLeft = 60;  // Total time for the game in seconds
+    let timerInterval;  // Variable to hold the timer interval
+    let gameStarted = false;  // To track if the game has started
+
+    // Start game function
+    function startGame() {
+        resetGameVariables();
+        updateDisplay();
+        clearGameContainer();
+
+        // Start the countdown timer
+        timerInterval = setInterval(() => {
+            updateTimer();
+        }, 1000);  // Update timer every second
+
+        // Create balloons at intervals
+        setInterval(createBalloon, 500);  // Create a new balloon every 0.5 seconds
+        gameStarted = true;  // Set game as started
+        toggleButtons(true);  // Show reset button, hide start button
+    }
+
+    function resetGameVariables() {
+        score = 0;
+        timeLeft = 60;
+        specialBalloonAvailable = true;
+    }
+
+    function updateDisplay() {
+        document.getElementById('score-count').innerText = "Score: 0";
+        document.getElementById('high-score').innerText = "High Score: " + highScore; // Show current high score
+        document.getElementById('timer').innerText = "Time Left: 60";
+        document.getElementById('reward-message').innerText = '';
+        document.getElementById('game-over').style.display = 'none';
+    }
+
+    function clearGameContainer() {
+        document.getElementById('game-container').innerHTML = '';  // Clear previous balloons
+    }
+
+    function updateTimer() {
+        timeLeft--;
+        document.getElementById('timer').innerText = "Time Left: " + timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);  // Stop the timer
+            endGame();  // Call the end game function
+        }
+    }
+
+    function toggleButtons(isGameStarted) {
+        document.getElementById('reset-button').style.display = isGameStarted ? 'inline' : 'none';  // Show reset button
+        document.getElementById('start-button').style.display = isGameStarted ? 'none' : 'inline';  // Hide start button
+    }
+
+    function createBalloon() {
+        const balloon = document.createElement('img');  // Create an image element
+        balloon.classList.add('balloon');
+        balloon.src = 'D:/red balloon project 1.png';  // Regular balloon image source
+        balloon.style.left = Math.random() * 90 + "%";  // Random horizontal position
+        
+        // Random vertical position (from bottom)
+        const randomBottom = Math.random() * (600 - 80); // 600 is game-container height, 80 is balloon height
+        balloon.style.bottom = randomBottom + "px";  // Random vertical position
+
+        balloon.addEventListener('click', function() {
+            popBalloon(balloon);
+        });
+
+        document.getElementById('game-container').appendChild(balloon);
+
+        // Remove balloon if not clicked after 5 seconds
+        setTimeout(() => {
+            if (balloon.parentNode) {  // Check if balloon still exists
+                balloon.remove();
+            }
+        }, 5000);
+    }
+
+    function popBalloon(balloon) {
+        balloon.remove();
+        score++;
+        updateScoreDisplay();
+
+        // Check for special balloon
+        checkForSpecialBalloon();
+    }
+
+    function updateScoreDisplay() {
+        document.getElementById('score-count').innerText = "Score: " + score;
+
+        // Update high score if current score is greater
+        if (score > highScore) {
+            highScore = score;  // Update high score
+            document.getElementById('high-score').innerText = "High Score: " + highScore; // Display new high score
+        }
+
+        // Give reward if a special condition is met
+        if (score === 5) {
+            giveReward();
+        }
+    }
+
+    function checkForSpecialBalloon() {
+        if (score >= 50 && specialBalloonAvailable) {
+            showSpecialBalloon();
+            specialBalloonAvailable = false;  // Prevent additional special balloons until reset
+            setTimeout(() => {
+                specialBalloonAvailable = true;  // Reset availability after 70 seconds
+            }, 70000);  // 70 seconds
+        }
+    }
+
+    function showSpecialBalloon() {
+        const specialBalloon = document.createElement('img');  // Create special balloon image
+        specialBalloon.classList.add('balloon');
+        specialBalloon.src = 'D:/KROWND MASCOT tsp solo.png';  // Use the special balloon image
+        specialBalloon.style.left = Math.random() * 90 + "%";  // Random horizontal position
+        const randomBottom = Math.random() * (600 - 80); // Random vertical position
+        specialBalloon.style.bottom = randomBottom + "px";
+
+        document.getElementById('game-container').appendChild(specialBalloon);
+
+        // Remove special balloon after 30 seconds
+        setTimeout(() => {
+            if (specialBalloon.parentNode) {
+                specialBalloon.remove();
+            }
+        }, 1000);  // Lasts for 1 second
+    }
+
+    function giveReward() {
+        const rewardMessage = document.getElementById('reward-message');
+        rewardMessage.innerText = "Congratulations! Use code SAVE10 for 30% off!";
+    }
+
+    function endGame() {
+        clearInterval(timerInterval);  // Stop the timer
+        const gameOverMessage = document.getElementById('game-over');
+        gameOverMessage.innerText = "Game Over! share Your high score with us on instagram @krownd.society.club : " + score;  // Customize your game over message here
+        gameOverMessage.style.display = 'block';  // Show game over message
+        clearGameContainer();  // Clear the game container
+        document.getElementById('timer').style.display = 'none';  // Hide the timer
+        document.getElementById('score-count').style.display = 'none';  // Hide the score
+        document.getElementById('reward-message').style.display = 'none';  // Hide reward message
+        toggleButtons(false);  // Show start button, hide reset button
+    }
+
+    // Button event listeners
+    document.getElementById('start-button').addEventListener('click', startGame);
+    document.getElementById('reset-button').addEventListener('click', resetGame);
+});

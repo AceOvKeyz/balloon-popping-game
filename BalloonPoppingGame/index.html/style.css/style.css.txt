@@ -1,0 +1,70 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;  /* Center vertically */
+    min-height: 100vh;  /* Full viewport height */
+    margin: 0;  /* Remove default margin */
+    background-color: black;  /* Set background color to black */
+    color: gold;  /* Set text color to gold for visibility */
+}
+
+#game-container {
+    position: relative;
+    width: 80%;  /* Width of the game */
+    max-width: 800px; /* Maximum width for larger screens */
+    height: 600px;  /* Height of the game */
+    overflow: hidden;
+    border: 1px solid gold;  /* Gold border for visibility */
+    background-color: black;  /* Keep game container background black */
+    margin: 20px auto; /* Center the game container */
+}
+
+.balloon {
+    position: absolute;
+    width: 50px;  /* Set width for the balloon image */
+    height: 80px;  /* Set height for the balloon image */
+    cursor: pointer;  /* Change cursor to pointer */
+}
+
+#score-count, #high-score, #timer {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+#reward-message {
+    font-size: 18px;
+    color: gold;  /* Set reward message color to gold */
+}
+
+#game-over {
+    font-size: 28px;
+    color: red;  /* Set game over message color to red */
+    display: none;  /* Initially hidden */
+}
+
+#button-container {
+    display: flex;  /* Use flexbox for layout */
+    justify-content: center;  /* Center buttons horizontally */
+    margin-top: 20px;  /* Space above the button container */
+    padding: 10px;  /* Padding for the button container */
+}
+
+button {
+    margin: 0 5px;  /* Adjust margin for spacing between buttons */
+    padding: 10px 20px;  /* Padding for button size */
+    font-size: 16px;
+    cursor: pointer;
+    background-color: gold;
+    border: none;
+    color: black;
+    border-radius: 5px;
+    max-width: 150px;  /* Limit the maximum width of buttons */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  /* Add some shadow for depth */
+    transition: background-color 0.3s;  /* Smooth transition for hover effect */
+}
+
+button:hover {
+    background-color: darkgoldenrod;  /* Change background color on hover */
+}
